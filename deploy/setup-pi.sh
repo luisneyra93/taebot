@@ -25,7 +25,9 @@ echo "==> Compilando"
 npm run build
 
 # Si quedo una instancia suelta (arranque manual), matarla para liberar el puerto.
-pkill -f "node ${APP_DIR}/dist/main.js" 2>/dev/null || true
+# Cubre tanto "node dist/main.js" como la ruta absoluta.
+pkill -f "${APP_DIR}/dist/main.js" 2>/dev/null || true
+pkill -f "^${NODE_BIN} dist/main.js$" 2>/dev/null || true
 
 echo "==> Instalando servicio systemd (pide sudo)"
 sed -e "s#__USER__#${RUN_USER}#g" \

@@ -87,3 +87,22 @@ El dashboard queda en `http://luisdev-1:3100` (desde la tailnet) o
 > Nota: la app no tiene autenticacion propia. Dentro de la tailnet solo la ven tus
 > dispositivos. Si se expone a internet (Tailscale Funnel o Nginx Proxy Manager),
 > hay que ponerle auth adelante.
+
+### Acceso desde el navegador (Tailscale)
+
+El puerto 3100 solo escucha en la Raspberry; hacia afuera se publica con
+`tailscale serve` (igual que dailyfood, que usa el 8443):
+
+```bash
+tailscale serve --bg --https=443 http://127.0.0.1:3100
+tailscale serve status          # ver la config actual
+tailscale serve --https=443 off # quitarla
+```
+
+URL: **https://luisdev-1.tailc16c13.ts.net/** — visible solo para los dispositivos
+de la tailnet, con HTTPS y certificado valido. La config de `serve` es persistente,
+sobrevive reinicios.
+
+Para exponerlo a internet abierto seria `tailscale funnel` (puertos 443, 8443 o
+10000), pero **no esta activado a proposito**: el dashboard no tiene login y desde
+ahi se arrancan y paran los bots.
