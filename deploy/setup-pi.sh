@@ -7,12 +7,9 @@ APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RUN_USER="$(whoami)"
 cd "$APP_DIR"
 
-if ! command -v node >/dev/null 2>&1; then
-  echo "!! Node.js no esta instalado. Instalalo primero, por ejemplo:"
-  echo "   curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - && sudo apt-get install -y nodejs"
-  exit 1
-fi
-echo "==> Node $(node -v)"
+# shellcheck source=deploy/node-env.sh
+. deploy/node-env.sh
+echo "==> node $("$NODE_BIN" -v) ($NODE_BIN)"
 
 if [ ! -f .env ]; then
   cp .env.example .env
@@ -27,15 +24,20 @@ npm ci
 echo "==> Compilando"
 npm run build
 
-echo "==> Instalando servicio systemd"
-sed -e "s#__USER__#${RUN_USER}#g" -e "s#__APP_DIR__#${APP_DIR}#g" \
-  deploy/taebot.service | sudo tee /etc/systemd/system/taebot.service >/dev/null
+# Si quedo una instancia suelta (arranque manual), matarla para liberar el puerto.
+pkill -f "node ${APP_DIR}/dist/main.js" 2>/dev/null || true
+
+echo "==> Instalando servicio systemd (pide sudo)"
+sed -e "s#__USER__#${RUN_USER}#g" \
+    -e "s#__APP_DIR__#${APP_DIR}#g" \
+    -e "s#__NODE_BIN__#${NODE_BIN}#g" \
+    deploy/taebot.service | sudo tee /etc/systemd/system/taebot.service >/dev/null
 
 sudo systemctl daemon-reload
 sudo systemctl enable taebot
 sudo systemctl restart taebot
-sleep 2
+sleep 3
 systemctl --no-pager --lines=15 status taebot || true
 
 PORT_VAL="$(grep -E '^PORT=' .env | cut -d= -f2 | tr -d '\r' || true)"
-echo "==> Listo. Dashboard en http://$(hostname -I | awk '{print $1}'):${PORT_VAL:-3100}"
+echo "==> Listo. Dashboard en http://$(hostname):${PORT_VAL:-3100}"

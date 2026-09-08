@@ -34,21 +34,27 @@ npm run lint
 npm test
 ```
 
-## Despliegue en la Raspberry
+## Despliegue en la Raspberry (LuisDev)
 
-La carpeta del proyecto en la Raspberry es un clon de este repo, asi que publicar = `git push` desde donde sea + `deploy.sh` en la Raspberry.
+La carpeta del proyecto en la Raspberry es un clon de este repo, asi que publicar =
+`git push` desde donde sea + `deploy.sh` en la Raspberry.
+
+| | |
+| --- | --- |
+| Host | `luisdev-1` (Tailscale) / `192.168.1.232` (LAN) |
+| Ruta | `/opt/LuisDev/Backends/TaeBot` |
+| Servicio | `taebot.service` (systemd) |
+| Puerto | `3100` (dailyfood usa 3002) |
+| Node | fnm, `~/.local/share/fnm/node-versions/v22.23.2` |
 
 ### Instalacion inicial (una sola vez)
 
 ```bash
-git clone https://github.com/luisneyra93/taebot.git ~/taebot
-cd ~/taebot
+git clone https://github.com/luisneyra93/taebot.git /opt/LuisDev/Backends/TaeBot
+cd /opt/LuisDev/Backends/TaeBot
 cp .env.example .env      # edita con las credenciales reales
-./deploy/setup-pi.sh
+./deploy/setup-pi.sh      # pide sudo para instalar el servicio
 ```
-
-`setup-pi.sh` instala dependencias, compila y registra el servicio systemd `taebot`
-(arranque automatico al encender la Raspberry).
 
 ### Publicar cambios
 
@@ -61,7 +67,7 @@ git push origin main
 En la Raspberry:
 
 ```bash
-cd ~/taebot && ./deploy/deploy.sh
+cd /opt/LuisDev/Backends/TaeBot && ./deploy/deploy.sh
 ```
 
 `deploy.sh` hace `git fetch` + `reset --hard` al branch actual, `npm ci`, `npm run build`
@@ -75,7 +81,9 @@ sudo systemctl restart taebot
 journalctl -u taebot -f          # logs en vivo
 ```
 
-El dashboard queda en `http://<ip-de-la-raspberry>:3100`.
+El dashboard queda en `http://luisdev-1:3100` (desde la tailnet) o
+`http://192.168.1.232:3100` (desde la LAN).
 
-> Nota: la app no tiene autenticacion propia. Si se expone fuera de la red local,
-> hay que ponerle un proxy con auth (o un tunel privado tipo Tailscale/Cloudflare Access).
+> Nota: la app no tiene autenticacion propia. Dentro de la tailnet solo la ven tus
+> dispositivos. Si se expone a internet (Tailscale Funnel o Nginx Proxy Manager),
+> hay que ponerle auth adelante.

@@ -1,19 +1,23 @@
 [Unit]
-Description=TAEBot dashboard (NestJS)
-After=network-online.target
-Wants=network-online.target
+Description=TAEBot - NestJS
+After=network.target
 
 [Service]
 Type=simple
 User=__USER__
+
 WorkingDirectory=__APP_DIR__
-EnvironmentFile=__APP_DIR__/.env
-ExecStart=/usr/bin/node dist/main
+
+Environment=NODE_ENV=production
+Environment=HOME=/home/__USER__
+
+ExecStart=__NODE_BIN__ __APP_DIR__/dist/main.js
+
 Restart=always
 RestartSec=5
+
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=taebot
 
 [Install]
 WantedBy=multi-user.target

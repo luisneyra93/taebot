@@ -6,9 +6,13 @@ set -euo pipefail
 APP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$APP_DIR"
 
+# shellcheck source=deploy/node-env.sh
+. deploy/node-env.sh
+
 echo "==> Descargando cambios de git"
-git fetch --all --prune
-git reset --hard "origin/$(git rev-parse --abbrev-ref HEAD)"
+BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+git fetch --prune origin
+git reset --hard "origin/${BRANCH}"
 
 echo "==> Instalando dependencias"
 npm ci
@@ -19,7 +23,7 @@ npm run build
 if systemctl list-unit-files | grep -q '^taebot.service'; then
   echo "==> Reiniciando servicio taebot"
   sudo systemctl restart taebot
-  sleep 2
+  sleep 3
   systemctl --no-pager --lines=10 status taebot || true
 else
   echo "!! El servicio taebot no existe todavia. Corre primero: ./deploy/setup-pi.sh"
