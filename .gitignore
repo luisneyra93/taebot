@@ -19,3 +19,9 @@ npm-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# runtime state
+/data
+
+# config local de Claude Code
+/.claude

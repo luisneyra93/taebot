@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TAEBot — Control</title>
-  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/styles.css?v=neon1" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&family=Share+Tech+Mono&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet" />
 </head>
 <body>
   <header class="top">
@@ -20,6 +20,28 @@
 
   <main>
     <section class="bots" id="bots-panel" aria-label="Bots"></section>
+
+    <section class="saldos-wrap">
+      <div class="tx-head">
+        <h2>Switcher de proveedores</h2>
+        <div class="filters">
+          <button type="button" id="btn-switcher-start" class="btn ok">Iniciar switcher</button>
+          <button type="button" id="btn-switcher-stop" class="btn stop">Detener switcher</button>
+        </div>
+      </div>
+      <section class="bots" id="switcher-panel" aria-label="Switcher"></section>
+    </section>
+
+    <section class="saldos-wrap">
+      <div class="tx-head">
+        <h2>Asignación de saldo</h2>
+        <div class="filters">
+          <button type="button" id="btn-saldo-start" class="btn ok">Iniciar saldos</button>
+          <button type="button" id="btn-saldo-stop" class="btn stop">Detener saldos</button>
+        </div>
+      </div>
+      <section class="bots" id="saldos-panel" aria-label="Saldos"></section>
+    </section>
 
     <section class="tx">
       <div class="tx-head">
@@ -69,6 +91,6 @@
     </section>
   </main>
 
-  <script src="/app.js?v=2"></script>
+  <script src="/app.js?v=4"></script>
 </body>
 </html>

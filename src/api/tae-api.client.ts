@@ -81,4 +81,30 @@ export class TaeApiClient {
     );
     return data;
   }
+
+  async asignarSaldo(token: string, body: Record<string, unknown>): Promise<unknown> {
+    const { data } = await firstValueFrom(
+      this.http.post(`${this.baseUrl}/saldos/asignarSaldo`, body, {
+        headers: { Authorization: `Bearer ${token}` },
+      }),
+    );
+    return data;
+  }
+
+  async setProductoProveedorEstatus(
+    token: string,
+    id: number,
+    estado: 0 | 1,
+  ): Promise<unknown> {
+    const { data } = await firstValueFrom(
+      this.http.put(
+        `${this.baseUrl}/switcher/estatus-producto-proveedor/${id}`,
+        { Id: id, Estado: estado },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      ),
+    );
+    return data;
+  }
 }

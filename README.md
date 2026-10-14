@@ -21,6 +21,15 @@ Variables (`.env`):
 | `BOT1_USERNAME` / `BOT1_PASSWORD` | Credenciales del bot 1 |
 | `BOT2_USERNAME` / `BOT2_PASSWORD` | Credenciales del bot 2 |
 | `PORT` | Puerto del dashboard (default 3100) |
+| `SALDO_AUTO_START` | Arranca la asignacion de saldo al levantar la app (default `true`) |
+| `SALDO_MIN_INTERVAL_MS` / `SALDO_MAX_INTERVAL_MS` | Rango aleatorio entre asignaciones (default 60000 / 300000) |
+| `SWITCHER_AUTO_START` | Arranca el switcher de proveedores al levantar la app (default `true`) |
+| `SWITCHER_MIN_INTERVAL_MS` / `SWITCHER_MAX_INTERVAL_MS` | Rango aleatorio entre cambios (default 60000 / 300000) |
+
+Modulos: `src/bots` (compras), `src/saldos` (asignacion de saldo a los clientes
+33 y 34), `src/switcher` (alterna los sets de proveedores 12/13 y 10/11) y
+`src/dashboard` (consulta de transacciones). El switcher guarda su estado en
+`data/switcher-state.json`, que no va a git.
 
 `.env` **no** se sube a git.
 

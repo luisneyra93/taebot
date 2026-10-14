@@ -8,6 +8,10 @@ import { AuthTokenService } from './auth/auth-token.service';
 import { BotRunnerService } from './bots/bot-runner.service';
 import { BotsController } from './bots/bots.controller';
 import { DashboardController } from './dashboard/dashboard.controller';
+import { SaldoAsignacionService } from './saldos/saldo-asignacion.service';
+import { SaldosController } from './saldos/saldos.controller';
+import { SwitcherService } from './switcher/switcher.service';
+import { SwitcherController } from './switcher/switcher.controller';
 
 @Module({
   imports: [
@@ -21,7 +25,18 @@ import { DashboardController } from './dashboard/dashboard.controller';
       exclude: ['/api/(.*)'],
     }),
   ],
-  controllers: [BotsController, DashboardController],
-  providers: [TaeApiClient, AuthTokenService, BotRunnerService],
+  controllers: [
+    BotsController,
+    DashboardController,
+    SaldosController,
+    SwitcherController,
+  ],
+  providers: [
+    TaeApiClient,
+    AuthTokenService,
+    BotRunnerService,
+    SaldoAsignacionService,
+    SwitcherService,
+  ],
 })
 export class AppModule {}
